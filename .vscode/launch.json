@@ -10,6 +10,40 @@
                 "package": "${workspaceFolder}/oec-art-platformeng/front-end/package.json",
                 "localRoot": "${workspaceFolder}/oec-art-platformeng/front-end"
             }
+        },
+        {
+            "name": ".NET Core Launch (web)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/oec-art-platformeng/payments-api/bin/Debug/net7.0/payments-api.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/oec-art-platformeng/payments-api",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            }
+        },
+        {
+            "name": ".NET Core Attach",
+            "type": "coreclr",
+            "request": "attach"
+        },
+        {
+            "name": "Docker .NET Launch",
+            "type": "docker",
+            "request": "launch",
+            "preLaunchTask": "docker-run: debug",
+            "netCore": {
+                "appProject": "${workspaceFolder}/oec-art-platformeng/payments-api/payments-api.csproj"
+            }
         }
     ]
 }

@@ -18,28 +18,96 @@
 			"type": "docker-run",
 			"label": "docker-run: release",
 			"dependsOn": [
-				"docker-build"
+				"docker-build: release"
 			],
-			"platform": "node",
-			"node": {
-				"package": "${workspaceFolder}/oec-art-platformeng/front-end/package.json"
+			"dockerRun": {},
+			"netCore": {
+				"appProject": "${workspaceFolder}/oec-art-platformeng/payments-api/payments-api.csproj"
 			}
 		},
 		{
 			"type": "docker-run",
 			"label": "docker-run: debug",
 			"dependsOn": [
-				"docker-build"
+				"docker-build: debug"
 			],
-			"dockerRun": {
-				"env": {
-					"DEBUG": "*",
-					"NODE_ENV": "development"
-				}
-			},
-			"node": {
-				"package": "${workspaceFolder}/oec-art-platformeng/front-end/package.json",
+			"dockerRun": {},
+			"netCore": {
+				"appProject": "${workspaceFolder}/oec-art-platformeng/payments-api/payments-api.csproj",
 				"enableDebugging": true
+			}
+		},
+		{
+			"label": "build",
+			"command": "dotnet",
+			"type": "process",
+			"args": [
+				"build",
+				"${workspaceFolder}/oec-art-platformeng/payments-api/payments-api.csproj",
+				"/property:GenerateFullPaths=true",
+				"/consoleloggerparameters:NoSummary;ForceNoAlign"
+			],
+			"problemMatcher": "$msCompile"
+		},
+		{
+			"label": "publish",
+			"command": "dotnet",
+			"type": "process",
+			"args": [
+				"publish",
+				"${workspaceFolder}/oec-art-platformeng/payments-api/payments-api.csproj",
+				"/property:GenerateFullPaths=true",
+				"/consoleloggerparameters:NoSummary;ForceNoAlign"
+			],
+			"problemMatcher": "$msCompile"
+		},
+		{
+			"label": "watch",
+			"command": "dotnet",
+			"type": "process",
+			"args": [
+				"watch",
+				"run",
+				"--project",
+				"${workspaceFolder}/oec-art-platformeng/payments-api/payments-api.csproj"
+			],
+			"problemMatcher": "$msCompile"
+		},
+		{
+			"type": "docker-build",
+			"label": "docker-build: debug",
+			"dependsOn": [
+				"build"
+			],
+			"dockerBuild": {
+				"tag": "oecartplatformeng:dev",
+				"target": "base",
+				"dockerfile": "${workspaceFolder}/oec-art-platformeng/payments-api/Dockerfile",
+				"context": "${workspaceFolder}",
+				"pull": true
+			},
+			"netCore": {
+				"appProject": "${workspaceFolder}/oec-art-platformeng/payments-api/payments-api.csproj"
+			}
+		},
+		{
+			"type": "docker-build",
+			"label": "docker-build: release",
+			"dependsOn": [
+				"build"
+			],
+			"dockerBuild": {
+				"tag": "oecartplatformeng:latest",
+				"dockerfile": "${workspaceFolder}/oec-art-platformeng/payments-api/Dockerfile",
+				"context": "${workspaceFolder}",
+				"platform": {
+					"os": "linux",
+					"architecture": "amd64"
+				},
+				"pull": true
+			},
+			"netCore": {
+				"appProject": "${workspaceFolder}/oec-art-platformeng/payments-api/payments-api.csproj"
 			}
 		}
 	]
